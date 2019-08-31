@@ -4,17 +4,39 @@
     <script src="https://unpkg.com/@tensorflow/tfjs"></script>
     <script src="https://unpkg.com/@tensorflow-models/mobilenet"></script>
     <script src="https://unpkg.com/@tensorflow-models/knn-classifier"></script>
+    <script
+  src="http://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
   </head>
   <body>
+      <h2>
+          Custom Image Classifier
+      </h2>
+    <p>Start capturing samples by clicking the buttons below, by putting similar varioations on each button</p>
+    <p>Once done try to put the similar images to test, the classifier will try to predict which call it belongs to</p>
     <div id="console"></div>
+
     <!-- Below is the video capture snippet -->
     <video autoplay playsinline muted id="webcam" width="224" height="224"></video>
+    <br>
     <button id="class-a">Add A</button>
     <button id="class-b">Add B</button>
     <button id="class-c">Add C</button>
-    <button id="class-d">Add D</button>
+    <br>
+
+
+
+    <h3>For static Image prediction, please upload the file below</h3>
+    <br>
+    <input type='file' onchange="upload_img(this);" />
+    <br>
+    <img id="img_file" src="#" alt="image_file" 
+    onerror="this.onerror=null;this.src='./images/photo_gallery.jpg';" />
 
     <!-- Load index.js after the content of the page -->
     <script src="index.js"></script>
+    <br>
+    <div id="console_2"></div>
   </body>
 </html>

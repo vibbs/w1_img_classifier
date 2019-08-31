@@ -4,6 +4,43 @@ const classifier = knnClassifier.create();
 let net;
 
 
+// Custom function to upload the image
+ function upload_img(input) {
+    console.log('Upload Image to classify');
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $('#img_file')
+                .attr('src', e.target.result)
+                .width(224)
+                .height(224);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+      
+        // try to predict the image after the image was loaded successfully
+        reader.onloadend = function(e){
+            predict_image()
+        }
+        
+    }
+
+    
+}
+
+// Predict the uploaded image with probablity
+async function predict_image(){
+    const imgEl = document.getElementById('img_file');
+    const result = await net.classify(imgEl);
+
+    document.getElementById('console_2').innerText = `
+            prediction: ${result[0].className}\n
+            probability: ${result[0].probability}
+        `;
+}
+
+// Async function to capture the webcam frames
 async function setupWebcam() {
     return new Promise((resolve, reject) => {
       const navigatorAny = navigator;
@@ -24,7 +61,7 @@ async function setupWebcam() {
   }
 
   
-
+// Main app function which is invoked during the load of the webpage
   async function app() {
     console.log('Loading mobilenet..');
   
@@ -33,9 +70,9 @@ async function setupWebcam() {
     console.log('Sucessfully loaded model');
   
     await setupWebcam().then(response => {
-        console.log('then ->',response);
+        // console.log('then ->',response);
     }).catch(e => {
-        console.log('Error ->', e);
+        // console.log('Error ->', e);
     });
     
     // Reads an image from the webcam and associates it with a specific class
@@ -55,12 +92,12 @@ async function setupWebcam() {
     document.getElementById('class-c').addEventListener('click', () => addExample(2));
 
     while (true) {
+
         if (classifier.getNumClasses() > 0) {
         // Get the activation from mobilenet from the webcam.
         const activation = net.infer(webcamElement, 'conv_preds');
         // Get the most likely class and confidences from the classifier module.
         const result = await classifier.predictClass(activation);
-
         const classes = ['A', 'B', 'C'];
         document.getElementById('console').innerText = `
             prediction: ${classes[result.classIndex]}\n
